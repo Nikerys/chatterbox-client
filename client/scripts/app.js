@@ -42,7 +42,7 @@ $(document).ready(function() {
       console.log('rendering rooms dropdown with rooms',window.app.rooms.length);
 
       var $selectDropDown = $('<select id="roomsDropDownList">');
-      $('<option>', {value: "All", text: "All"}).appendTo($selectDropDown);
+      $('<option>', {value: "", text: "All"}).appendTo($selectDropDown);
       window.app.rooms.filter( unfilteredRoom => typeof unfilteredRoom === 'string').forEach( room => {
         if (room === '') room = '[unamed room]';
         $('<option>', {value: room, text: room}).appendTo($selectDropDown);
@@ -98,16 +98,16 @@ $(document).ready(function() {
     }
 
     fetchMessagesFromRoom(roomname) {
-       console.log('fetching messages for room ', roomname);
+      console.log('fetching messages for room ', roomname);
       window.app.clearMessages();
      
        $.ajax({
         url: 'http://parse.sfm6.hackreactor.com/chatterbox/classes/messages/',
         type: 'GET',
-        data: {where: {roomname:roomname}, order: 'createdAt'},
+        data: {where: {roomname:roomname}, order: 'createdAt', limit: this.messageLimit},
         contentType: 'application/json',
         success: function (data) {
-          console.log(`chatterbox: Successfully fetched  all messages for room ${roomname} with data: ${data}`);
+          console.log(`chatterbox: Successfully fetched  all messages for room ${roomname}`);
           console.log(data.results);
 
           window.app.renderAllMessages(data.results);
